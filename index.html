@@ -1,5 +1,14 @@
 <!DOCTYPE html>
 <html>
+ <style>
+* { box-sizing: border-box !important; }
+body { margin:0 !important; padding:0 !important; overflow-x:hidden !important; }
+header, .top-bar, .header { flex-wrap: wrap !important; padding: 8px !important; }
+h1, .logo, .title { font-size: clamp(18px, 6vw, 28px) !important; white-space: normal !important; line-height:1.1 !important; text-align:center !important; }
+.grid, .container, .main { width:100% !important; max-width:100% !important; padding: 10px !important; grid-template-columns: 1fr 1fr !important; gap:8px !important; }
+.card, .box { min-height: 70px !important; font-size: 13px !important; }
+.bottom-bar, footer, .nav { padding-bottom: env(safe-area-inset-bottom) !important; padding-bottom: 12px !important; position: fixed !important; bottom:0 !important; width:100% !important; }
+ </style>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
  <link rel="manifest" href="manifest.json">
