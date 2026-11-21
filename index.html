@@ -5,23 +5,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 <style>
   *{margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
-  body{ background:black; width:100vw; height:100dvh; overflow:hidden; font-family:'Orbitron', sans-serif; }
-  .game-screen{ width:100vw; height:100dvh; position:fixed; inset:0; background:black; }
+  body{ background:#000; width:100vw; height:100vh; overflow:hidden; font-family:'Orbitron', sans-serif; }
+  .game-screen{ width:100vw; height:100vh; position:fixed; left:0; top:0; background:#000; overflow:hidden; }
   #screen1{ position:absolute; inset:0; background:radial-gradient(circle at center, #001a2e 0%, #000000 70%); display:flex; justify-content:center; align-items:center; z-index:10; }
-  .cosmic-big{ font-size:20px; font-weight:900; letter-spacing:12px; opacity:0; white-space:nowrap; background: linear-gradient(180deg, #ffffff 0%, #7fd4ff 40%, #00aaff 70%, #004d7a 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 12px #7fd4ff) drop-shadow(0 0 25px #00aaff); animation: slowExpand 5s ease-in-out 1s forwards; }
-  @keyframes slowExpand{ 0%{ opacity:0; transform:scale(0.3); } 40%{ opacity:1; transform:scale(0.7); } 70%{ opacity:1; transform:scale(0.95); } 100%{ opacity:1; transform:scale(1); font-size:52px; } }
+  .cosmic-big{ font-size:52px; font-weight:900; letter-spacing:12px; white-space:nowrap; background: linear-gradient(180deg, #ffffff 0%, #7fd4ff 40%, #00aaff 70%, #004d7a 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 12px #7fd4ff) drop-shadow(0 0 25px #00aaff); }
   #screen2{ position:absolute; inset:0; display:none; z-index:20; background-image: url('background.jpg'); background-size: cover; background-position: center; }
   #screen2::after{ content:''; position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(255,60,0,0.18) 55%, rgba(0,0,0,0.65) 100%); }
   .content2{ position:relative; z-index:2; width:100%; height:100%; }
   .cosmic-corner{ position:absolute; top:18px; left:20px; font-size:22px; font-weight:900; letter-spacing:6px; background: linear-gradient(180deg, #ffffff 0%, #FFD700 50%, #FF6A00 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 10px #FFA500); }
   .center-box{ position:absolute; top:52%; left:50%; transform:translate(-50%,-50%); text-align:center; width:100%; }
-  .new-era{ font-size:38px; font-weight:900; letter-spacing:8px; color:#fff; text-shadow:0 0 10px #FFA500, 0 0 25px #FF6A00, 0 0 45px #FF0000; animation: fireGlow 0.8s infinite alternate; }
-  @keyframes fireGlow{ 0%{ text-shadow:0 0 8px #FFA500, 0 0 20px #FF6A00, 0 0 40px #FF0000; } 100%{ text-shadow:0 0 15px #FFD700, 0 0 35px #FF6A00, 0 0 60px #FF0000; } }
+  .new-era{ font-size:38px; font-weight:900; letter-spacing:8px; color:#fff; text-shadow:0 0 10px #FFA500, 0 0 25px #FF6A00, 0 0 45px #FF0000; }
   .loading-area{ position:absolute; bottom:55px; left:50%; transform:translateX(-50%); width:72%; text-align:center; }
   .loading-box{ width:100%; height:18px; background:rgba(0,0,0,0.7); border:1.5px solid #FFD700; border-radius:20px; overflow:hidden; box-shadow:0 0 20px rgba(255,110,0,0.8); }
-  #bar{ height:100%; width:0%; background:linear-gradient(90deg,#8B0000,#FF0000,#FF6A00,#FFD700,#FFFF00,#FFFFFF); background-size:250% 100%; box-shadow:0 0 25px #FF6A00; border-radius:20px; animation: fireMove 0.5s linear infinite, flicker 0.15s infinite alternate; }
-  @keyframes fireMove{ 0%{ background-position:0% 0%; } 100%{ background-position:250% 0%; } }
-  @keyframes flicker{ 0%{ filter:brightness(1); } 100%{ filter:brightness(1.4); } }
+  #bar{ height:100%; width:0%; background:linear-gradient(90deg,#8B0000,#FF0000,#FF6A00,#FFD700,#FFFF00,#FFFFFF); background-size:250% 100%; box-shadow:0 0 25px #FF6A00; border-radius:20px; }
   #percent{ margin-top:10px; font-size:15px; color:#FFD700; letter-spacing:2px; font-weight:700; text-shadow:0 0 10px #FF6A00; }
   .fire{ position:absolute; bottom:74px; left:50%; transform:translateX(-50%); width:72%; height:55px; pointer-events:none; }
   .flame{ position:absolute; bottom:0; border-radius:50%; opacity:0; animation: flameUp 0.9s ease-out infinite; }
@@ -43,13 +39,11 @@
   .top-box{ width:38px; height:32px; border:1.5px solid rgba(255,255,255,0.6); border-radius:6px; background:rgba(0,0,0,0.4); }
   .side-box{ position:absolute; top:75px; width:55px; height:110px; border:1.5px dashed rgba(255,255,255,0.4); border-radius:10px; background:rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.3); font-size:9px; text-align:center; }
   .side-left{ left:12px; } .side-right{ right:12px; }
-  .char-wrap{ position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:170px; height:250px; perspective:900px; touch-action:none; pointer-events:none; }
-  .char{ width:100%; height:100%; position:relative; transform-style:preserve-3d; cursor:default; transform:rotateY(0deg); }
-  .char-platform{ position:absolute; bottom:-6px; left:50%; transform:translateX(-50%); width:150px; height:18px; background:radial-gradient(ellipse, #00e5ff 0%, transparent 70%); border-radius:50%; filter:blur(2px); animation: platGlow 1.5s infinite alternate; }
-  @keyframes platGlow{ 0%{ opacity:0.6; } 100%{ opacity:1; } }
-  .char-img{ width:100%; height:100%; object-fit:contain; filter:drop-shadow(0 0 18px rgba(0,240,255,0.6)); animation: floatChar 2.5s ease-in-out infinite; pointer-events:none; transform:translateZ(30px); }
-  @keyframes floatChar{ 0%,100%{ transform:translateY(0) translateZ(30px); } 50%{ transform:translateY(-6px) translateZ(30px); } }
-  .char-hint{ display:none; }
+  .char-wrap{ position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:170px; height:250px; pointer-events:none; }
+  .char{ width:100%; height:100%; position:relative; }
+  .char-platform{ position:absolute; bottom:-6px; left:50%; transform:translateX(-50%); width:150px; height:18px; background:radial-gradient(ellipse, #00e5ff 0%, transparent 70%); border-radius:50%; filter:blur(2px); }
+  .char-img{ width:100%; height:100%; object-fit:contain; filter:drop-shadow(0 0 18px rgba(0,240,255,0.6)); animation: floatChar 2.5s ease-in-out infinite; pointer-events:none; }
+  @keyframes floatChar{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-6px); } }
   .lobby-bottom{ position:absolute; bottom:0; left:0; width:100%; height:70px; display:flex; align-items:center; gap:10px; padding:0 12px 12px 12px; background:linear-gradient(0deg, rgba(0,0,0,0.8), transparent); }
   .start-btn{ min-width:95px; height:48px; background:linear-gradient(180deg,#FFD700,#FF6A00); border:none; border-radius:10px; font-family:'Orbitron'; font-size:18px; font-weight:900; letter-spacing:2px; color:#000; box-shadow:0 0 20px #FFA500; }
   .bottom-small{ display:flex; gap:8px; flex:1; justify-content:center; }
@@ -60,7 +54,7 @@
   #timerText{ font-size:16px; font-weight:900; color:#FFD700; letter-spacing:4px; text-shadow:0 0 10px #000; }
   #cutBtn{ position:absolute; top:0px; right:-35px; width:28px; height:28px; background:#FF0000; color:#fff; border:2px solid #fff; border-radius:50%; font-size:16px; font-weight:900; line-height:24px; text-align:center; cursor:pointer; }
   #screen5{ position:fixed; inset:0; display:none; z-index:500; background:#000; }
-  #game{position:absolute;inset:0;width:100%;height:100%;transform:none;background:#3a7a2a;overflow:hidden}
+  #game{position:absolute;inset:0;width:100%;height:100%;background:#3a7a2a;overflow:hidden}
   #game canvas{display:block;width:100%;height:100%}
   #joy{position:absolute;bottom:20px;left:20px;width:130px;height:130px;border:2px solid rgba(255,255,255,.9);border-radius:50%;background:rgba(0,0,0,.35);z-index:10}
   #stick{position:absolute;left:40px;top:40px;width:50px;height:50px;background:#fff;border-radius:50%}
@@ -69,20 +63,13 @@
   #hpBar{width:150px;height:14px;background:#333;border:2px solid #fff;border-radius:10px;overflow:hidden;margin-top:3px}
   #hpFill{height:100%;width:100%;background:#0f0}
   #winnerBox{ position:absolute; inset:0; display:none; z-index:100; background:rgba(0,0,0,0.75); text-align:center; overflow:hidden; }
-  #winnerText{ position:absolute; top:30%; left:50%; transform:translate(-50%,-50%); font-size:55px; font-weight:900; letter-spacing:6px; color:#FFD700; -webkit-text-stroke:2px #fff; animation:winnerBlink 0.4s infinite alternate; white-space:nowrap; }
-  @keyframes winnerBlink{ 0%{ opacity:1; transform:translate(-50%,-50%) scale(1); text-shadow:0 0 20px #FFD700, 0 0 50px #FF6A00, 0 0 80px #FF0000; } 100%{ opacity:0.4; transform:translate(-50%,-50%) scale(1.08); text-shadow:0 0 30px #FFFF00, 0 0 60px #FFD700, 0 0 100px #FF6A00; } }
+  #winnerText{ position:absolute; top:30%; left:50%; transform:translate(-50%,-50%); font-size:55px; font-weight:900; letter-spacing:6px; color:#FFD700; -webkit-text-stroke:2px #fff; white-space:nowrap; }
   #winnerSub{ position:absolute; top:48%; left:50%; transform:translate(-50%,-50%); font-size:20px; color:#fff; letter-spacing:3px; }
   #giftBtn{ position:absolute; top:62%; left:50%; transform:translate(-50%,-50%); display:none; padding:16px 30px; background:linear-gradient(180deg,#FFD700,#FF6A00); border:none; border-radius:15px; font-family:'Orbitron'; font-size:20px; font-weight:900; color:#000; box-shadow:0 0 30px #FFD700; }
   .patakha{ position:absolute; width:8px; height:8px; border-radius:50%; pointer-events:none; }
   #deadBox{ position:absolute; inset:0; display:none; z-index:100; background:rgba(0,0,0,0.65); text-align:center; }
-  #deadText{ position:absolute; top:42%; left:50%; transform:translate(-50%,-50%); font-size:28px; font-weight:900; letter-spacing:4px; color:#FF3333; -webkit-text-stroke:1px #fff; animation:deadBlink 0.5s infinite alternate; white-space:nowrap; }
-  @keyframes deadBlink{ 0%{ opacity:1; transform:translate(-50%,-50%) scale(1); text-shadow:0 0 12px #FF0000, 0 0 30px #FF0000; } 100%{ opacity:0.4; transform:translate(-50%,-50%) scale(1.05); text-shadow:0 0 18px #FF3333, 0 0 40px #FF0000; } }
+  #deadText{ position:absolute; top:42%; left:50%; transform:translate(-50%,-50%); font-size:28px; font-weight:900; letter-spacing:4px; color:#FF3333; -webkit-text-stroke:1px #fff; white-space:nowrap; }
   #deadReturnBtn{ position:absolute; top:56%; left:50%; transform:translate(-50%,-50%); display:none; padding:8px 16px; background:linear-gradient(180deg,#FFD700,#FF6A00); border:none; border-radius:8px; font-family:'Orbitron'; font-size:13px; font-weight:900; color:#000; box-shadow:0 0 15px #FFD700; }
-  /* PEHLE JAISA - Khulte hi Horizontal, koi message nahi */
-  @media (orientation: portrait){
-    .game-screen{ width:100dvh; height:100vw; transform: rotate(90deg); transform-origin: center center; top:50%; left:50%; translate:-50% -50%; }
-    #screen5{ width:100dvh; height:100vw; transform: rotate(90deg); transform-origin: center center; top:50%; left:50%; translate:-50% -50%; }
-  }
 </style>
 </head>
 <body>
@@ -135,8 +122,17 @@
     </div>
   </div>
 <script>
-  setTimeout(()=>{ document.getElementById('screen1').style.display='none'; document.getElementById('screen2').style.display='block'; startLoading(); startFire(); }, 6000);
-  function startLoading(){ let p=0; let bar=document.getElementById('bar'); let percent=document.getElementById('percent'); let timer=setInterval(()=>{ p+=1; if(p>=100){ p=100; clearInterval(timer); percent.innerText='LOADING... 100%'; setTimeout(()=>{ document.getElementById('screen2').style.display='none'; document.getElementById('screen3').style.display='block'; }, 800); } bar.style.width=p+'%'; if(p<100) percent.innerText='LOADING... '+p+'%'; }, 70); }
+  let moved = false;
+  function goNext(){
+    if(moved) return; moved = true;
+    document.getElementById('screen1').style.display='none';
+    document.getElementById('screen2').style.display='block';
+    startLoading(); startFire();
+  }
+  window.addEventListener('load', function(){ setTimeout(goNext, 2000); });
+  setTimeout(goNext, 2500);
+  document.addEventListener('click', goNext);
+  function startLoading(){ let p=0; let bar=document.getElementById('bar'); let percent=document.getElementById('percent'); let timer=setInterval(()=>{ p+=1; if(p>=100){ p=100; clearInterval(timer); percent.innerText='LOADING... 100%'; setTimeout(()=>{ document.getElementById('screen2').style.display='none'; document.getElementById('screen3').style.display='block'; }, 500); } bar.style.width=p+'%'; if(p<100) percent.innerText='LOADING... '+p+'%'; }, 50); }
   function startFire(){ let box=document.getElementById('fireBox'); setInterval(()=>{ if(document.getElementById('screen2').style.display==='none') return; let f=document.createElement('div'); f.className='flame'; let s=12+Math.random()*22; f.style.width=s+'px'; f.style.height=s*1.4+'px'; f.style.left=(Math.random()*100)+'%'; f.style.background='radial-gradient(circle, #FFFFFF 0%, #FFFF00 20%, #FFD700 40%, #FF6A00 70%, transparent 100%)'; f.style.animationDuration=(0.6+Math.random()*0.6)+'s'; box.appendChild(f); setTimeout(()=>f.remove(),1200); },70); setInterval(()=>{ if(document.getElementById('screen2').style.display==='none') return; let e=document.createElement('div'); e.className='ember'; e.style.left=(Math.random()*100)+'%'; box.appendChild(e); setTimeout(()=>e.remove(),1800); },120); }
   document.getElementById('screen3').onclick = () => { document.getElementById('screen3').style.display='none'; document.getElementById('screen4').style.display='block'; }
   let timerInterval = null;
