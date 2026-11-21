@@ -2,8 +2,6 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="screen-orientation" content="landscape">
-<meta name="orientation" content="landscape">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 <style>
   *{margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
@@ -80,15 +78,12 @@
   #deadText{ position:absolute; top:42%; left:50%; transform:translate(-50%,-50%); font-size:28px; font-weight:900; letter-spacing:4px; color:#FF3333; -webkit-text-stroke:1px #fff; animation:deadBlink 0.5s infinite alternate; white-space:nowrap; }
   @keyframes deadBlink{ 0%{ opacity:1; transform:translate(-50%,-50%) scale(1); text-shadow:0 0 12px #FF0000, 0 0 30px #FF0000; } 100%{ opacity:0.4; transform:translate(-50%,-50%) scale(1.05); text-shadow:0 0 18px #FF3333, 0 0 40px #FF0000; } }
   #deadReturnBtn{ position:absolute; top:56%; left:50%; transform:translate(-50%,-50%); display:none; padding:8px 16px; background:linear-gradient(180deg,#FFD700,#FF6A00); border:none; border-radius:8px; font-family:'Orbitron'; font-size:13px; font-weight:900; color:#000; box-shadow:0 0 15px #FFD700; }
-  @media (orientation: portrait){
-    .game-screen{ width:100dvh; height:100vw; transform: rotate(90deg); transform-origin: center center; top:50%; left:50%; translate:-50% -50%; }
-    #screen5{ width:100dvh; height:100vw; transform: rotate(90deg); transform-origin: center center; top:50%; left:50%; translate:-50% -50%; }
-  }
-  body.force-landscape .game-screen{ width:100dvh !important; height:100vw !important; transform: rotate(90deg) !important; transform-origin: center center !important; top:50% !important; left:50% !important; translate:-50% -50% !important; }
-  body.force-landscape #screen5{ width:100dvh !important; height:100vw !important; transform: rotate(90deg) !important; transform-origin: center center !important; top:50% !important; left:50% !important; translate:-50% -50% !important; }
+  #rotateMsg{ position:fixed; inset:0; display:none; z-index:1000; background:rgba(0,0,0,0.92); color:#FFD700; flex-direction:column; align-items:center; justify-content:center; gap:15px; text-align:center; font-size:18px; font-weight:900; letter-spacing:2px; }
+  @media (orientation: portrait){ #rotateMsg{ display:flex; } }
 </style>
 </head>
 <body>
+  <div id="rotateMsg"><div style="font-size:50px;">📱↻</div><div>PHONE KO AADA KARO</div><div style="font-size:12px; color:#fff;">GAME LANDSCAPE ME HAI</div></div>
   <div class="game-screen" id="mainScreen">
     <div id="screen1"><div class="cosmic-big">COSMIC</div></div>
     <div id="screen2">
@@ -138,26 +133,33 @@
     </div>
   </div>
 <script>
-  // ===== OPEN HOTE HI AUTO SHIFT - TAP KA WAIT NAHI =====
-  if(window.innerHeight > window.innerWidth){ document.body.classList.add('force-landscape'); }
-  function autoLandscape(){
+  // ===== LOBBY CLICK WALA FIX - TAP TO NEXT PE HI 3 BAAR LOCK =====
+  function tryLandscape(){
     if(document.documentElement.requestFullscreen){ document.documentElement.requestFullscreen().catch(()=>{}); }
-    if(screen.orientation && screen.orientation.lock){ screen.orientation.lock('landscape').catch(()=>{ document.body.classList.add('force-landscape'); }); }
-    else { document.body.classList.add('force-landscape'); }
-    if(window.innerWidth > window.innerHeight){ document.body.classList.remove('force-landscape'); }
+    if(screen.orientation && screen.orientation.lock){ screen.orientation.lock('landscape').catch(()=>{}); }
   }
-  window.addEventListener('load', ()=>{ autoLandscape(); });
-  document.addEventListener('touchstart', ()=>{ autoLandscape(); }, {once:true});
-  window.addEventListener('orientationchange', ()=>{ setTimeout(()=>{ if(window.innerWidth > window.innerHeight) document.body.classList.remove('force-landscape'); }, 300); });
-  window.addEventListener('resize', ()=>{ if(window.innerWidth > window.innerHeight) document.body.classList.remove('force-landscape'); });
+  function forceLandscapeNow(){
+    tryLandscape();
+    setTimeout(tryLandscape, 100);
+    setTimeout(tryLandscape, 400);
+    setTimeout(tryLandscape, 900);
+    setTimeout(()=>{ if(window.innerWidth > window.innerHeight) document.getElementById('rotateMsg').style.display='none'; }, 500);
+  }
+  document.addEventListener('click', ()=>{ tryLandscape(); });
+  document.getElementById('rotateMsg').addEventListener('click', ()=>{ forceLandscapeNow(); });
   setTimeout(()=>{ document.getElementById('screen1').style.display='none'; document.getElementById('screen2').style.display='block'; startLoading(); startFire(); }, 6000);
   function startLoading(){ let p=0; let bar=document.getElementById('bar'); let percent=document.getElementById('percent'); let timer=setInterval(()=>{ p+=1; if(p>=100){ p=100; clearInterval(timer); percent.innerText='LOADING... 100%'; setTimeout(()=>{ document.getElementById('screen2').style.display='none'; document.getElementById('screen3').style.display='block'; }, 800); } bar.style.width=p+'%'; if(p<100) percent.innerText='LOADING... '+p+'%'; }, 70); }
   function startFire(){ let box=document.getElementById('fireBox'); setInterval(()=>{ if(document.getElementById('screen2').style.display==='none') return; let f=document.createElement('div'); f.className='flame'; let s=12+Math.random()*22; f.style.width=s+'px'; f.style.height=s*1.4+'px'; f.style.left=(Math.random()*100)+'%'; f.style.background='radial-gradient(circle, #FFFFFF 0%, #FFFF00 20%, #FFD700 40%, #FF6A00 70%, transparent 100%)'; f.style.animationDuration=(0.6+Math.random()*0.6)+'s'; box.appendChild(f); setTimeout(()=>f.remove(),1200); },70); setInterval(()=>{ if(document.getElementById('screen2').style.display==='none') return; let e=document.createElement('div'); e.className='ember'; e.style.left=(Math.random()*100)+'%'; box.appendChild(e); setTimeout(()=>e.remove(),1800); },120); }
-  document.getElementById('screen3').onclick = () => { autoLandscape(); document.getElementById('screen3').style.display='none'; document.getElementById('screen4').style.display='block'; }
-  document.addEventListener('click', ()=>{ autoLandscape(); });
+  document.getElementById('screen3').onclick = () => {
+    forceLandscapeNow();
+    document.getElementById('screen3').style.display='none';
+    document.getElementById('screen4').style.display='block';
+    setTimeout(forceLandscapeNow, 200);
+    setTimeout(forceLandscapeNow, 600);
+  }
   let timerInterval = null;
   document.getElementById('startBtn').addEventListener('click', (e)=>{
-    e.stopPropagation(); autoLandscape(); gameOver = true;
+    e.stopPropagation(); forceLandscapeNow(); gameOver = true;
     if(timerInterval) clearInterval(timerInterval);
     let tBox=document.getElementById('timerBox'); let tNum=document.getElementById('timerNum'); let count=5;
     tBox.style.display='block'; tNum.innerText=count;
@@ -191,7 +193,7 @@
   }
   function winGame(){ if(gameOver) return; gameOver=true; document.getElementById('winnerBox').style.display='block'; document.getElementById('giftBtn').style.display='none'; spawnPatakha(); patakhaInterval=setInterval(spawnPatakha, 500); setTimeout(()=>{ clearInterval(patakhaInterval); document.getElementById('giftBtn').style.display='block'; }, 10000); }
   function deadGame(){ if(gameOver) return; gameOver=true; document.getElementById('deadBox').style.display='block'; document.getElementById('deadReturnBtn').style.display='none'; setTimeout(()=>{ document.getElementById('deadReturnBtn').style.display='block'; }, 4000); }
-  function backToLobby(){ gameOver=true; holding=false; joy.x=0; joy.y=0; document.getElementById('winnerBox').style.display='none'; document.getElementById('deadBox').style.display='none'; document.getElementById('screen5').style.display='none'; document.getElementById('mainScreen').style.display='block'; document.getElementById('screen4').style.display='block'; }
+  function backToLobby(){ gameOver=true; holding=false; joy.x=0; joy.y=0; document.getElementById('winnerBox').style.display='none'; document.getElementById('deadBox').style.display='none'; document.getElementById('screen5').style.display='none'; document.getElementById('mainScreen').style.display='block'; document.getElementById('screen4').style.display='block'; setTimeout(forceLandscapeNow, 200); }
   document.getElementById('giftBtn').addEventListener('click', (e)=>{ e.stopPropagation(); backToLobby(); });
   document.getElementById('deadReturnBtn').addEventListener('click', (e)=>{ e.stopPropagation(); backToLobby(); });
   let cv=document.getElementById('cv'), ctx=cv.getContext('2d'); let game=document.getElementById('game');
